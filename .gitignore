@@ -42,3 +42,9 @@ target/
 # Gradle
 .gradle/
 build/
+
+# Environment Variables
+.env
+*.env
+.env.*
+

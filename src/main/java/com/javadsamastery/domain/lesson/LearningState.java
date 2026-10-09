@@ -1,0 +1,18 @@
+package com.javadsamastery.domain.lesson;
+
+public enum LearningState {
+    CONTENT_INTRO,
+    CONCEPT_ASSESSMENT,
+    REMEDIATION,
+    DERIVE,
+    IMPLEMENTATION,
+    DEBUGGING,
+    EXPLANATION,
+    COUNTEREXAMPLE,
+    OPTIMIZE,
+    TRANSFER,
+    RETRIEVAL,
+    COMPLETED,
+    FAILED_TERMINATED,
+    SOLUTION_WALKTHROUGH
+}

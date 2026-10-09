@@ -1,0 +1,110 @@
+[
+  {
+    "questionId": "bs-q1",
+    "topicId": "binary-search",
+    "targetStage": "CONCEPT_ASSESSMENT",
+    "difficulty": "EASY",
+    "content": "Why does Binary Search require the array to be sorted?",
+    "expectedEvidence": "Because it relies on the property that all elements to the left are smaller and right are larger, allowing safe elimination of half the search space.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "bs-q2",
+    "topicId": "binary-search",
+    "targetStage": "DERIVE",
+    "difficulty": "MEDIUM",
+    "content": "If you know the target is smaller than the middle element, how do you adjust your search boundaries?",
+    "expectedEvidence": "Move the right boundary to mid - 1.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "bs-q3",
+    "topicId": "binary-search",
+    "targetStage": "IMPLEMENTATION",
+    "difficulty": "MEDIUM",
+    "content": "Implement Binary Search to return the index of the target or -1.",
+    "expectedEvidence": "While left <= right loop, mid calculation, boundary updates.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "bs-q4",
+    "topicId": "binary-search",
+    "targetStage": "DEBUGGING",
+    "difficulty": "MEDIUM",
+    "content": "What happens if you calculate mid as (left + right) / 2 for very large arrays?",
+    "expectedEvidence": "Integer overflow.",
+    "targetsMisconception": "overflow",
+    "isRemediation": true,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "overflow"
+    ]
+  },
+  {
+    "questionId": "bs-q5",
+    "topicId": "binary-search",
+    "targetStage": "EXPLANATION",
+    "difficulty": "MEDIUM",
+    "content": "Explain why the loop condition must be left <= right and not just left < right.",
+    "expectedEvidence": "To ensure the single element remaining when left == right is checked.",
+    "targetsMisconception": "off-by-one",
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "off-by-one"
+    ]
+  },
+  {
+    "questionId": "bs-q6",
+    "topicId": "binary-search",
+    "targetStage": "COUNTEREXAMPLE",
+    "difficulty": "MEDIUM",
+    "content": "Give an array where standard binary search might infinite loop if you updated left = mid instead of left = mid + 1.",
+    "expectedEvidence": "Any two element array where left=0, right=1, and target > arr[0]. mid=0, left becomes 0.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "bs-q7",
+    "topicId": "binary-search",
+    "targetStage": "OPTIMIZE",
+    "difficulty": "HARD",
+    "content": "How would you change your binary search to find the FIRST occurrence of a target in an array with duplicates?",
+    "expectedEvidence": "When arr[mid] == target, save the index and move right = mid - 1 to keep searching left.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "bs-q8",
+    "topicId": "binary-search",
+    "targetStage": "TRANSFER",
+    "difficulty": "HARD",
+    "content": "Use binary search to find the square root of an integer x to the nearest integer.",
+    "expectedEvidence": "Search space is 0 to x. mid * mid compared to x.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": true,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  }
+]

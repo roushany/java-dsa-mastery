@@ -1,0 +1,22 @@
+{
+  "topicId": "binary-search",
+  "title": "Binary Search",
+  "learningObjectives": "Understand how to efficiently search a sorted array by eliminating half the search space.",
+  "prerequisites": "linear-search, arrays",
+  "intuition": "If you are looking for a word in a dictionary, you don't start at page 1 and read every word (Linear Search). You open the middle, see if the word comes before or after, and eliminate half the book immediately. When can I eliminate half the search space? Only when the data is SORTED.",
+  "formalModel": "f(A, target) = i if A[i] == target else -1. Let L=0, R=n-1. While L<=R, mid = L+(R-L)/2...",
+  "recognitionSignals": "Sorted array, requirement for O(log n) time complexity, 'find a value', 'find a boundary'.",
+  "derivation": "1. Need bounds: left and right. 2. Find middle element. 3. Compare middle with target. 4. If target < middle, eliminate right half (right = mid - 1). 5. If target > middle, eliminate left half (left = mid + 1). 6. Repeat until left > right.",
+  "pseudocode": "L = 0, R = A.length - 1\nwhile L <= R:\n  mid = L + (R-L)/2\n  if A[mid] == target return mid\n  if A[mid] < target L = mid + 1\n  else R = mid - 1\nreturn -1",
+  "javaImplementation": "public int search(int[] arr, int target) {\n    int left = 0;\n    int right = arr.length - 1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n        if (arr[mid] == target) return mid;\n        if (arr[mid] < target) left = mid + 1;\n        else right = mid - 1;\n    }\n    return -1;\n}",
+  "complexity": "Time: O(log N) worst/average, O(1) best. Space: O(1).",
+  "correctness": "Loop invariant: if the target is in the array, it must be in the range [left, right]. The search space strictly decreases each iteration because mid is excluded.",
+  "edgeCases": "Empty array, array with 1 element, target smaller than all elements, target larger than all elements, even number of elements.",
+  "misconceptions": "Believing Binary Search works on unsorted arrays. Calculating mid as (left+right)/2 which causes integer overflow.",
+  "counterexamples": "[5, 2, 8, 1]. Binary search for 1. Mid is 2. 1 < 2, search left [5]. Mid is 5. 1 != 5. Not found! Unsorted fails.",
+  "commonWrongApproaches": "Using (left + right) / 2 instead of left + (right - left) / 2. Using left < right instead of left <= right. Setting left = mid instead of mid + 1, causing infinite loops.",
+  "comparisonWithAlternatives": "Linear Search: O(N) time but works on unsorted. Binary Search: O(log N) time but REQUIRES sorting. When you need multiple searches, sorting once (O(N log N)) and binary searching multiple times is optimal.",
+  "practiceProblems": "1. Classic Binary Search, 2. First Bad Version, 3. Search Insert Position.",
+  "transferProblem": "Suppose you have an array that increases and then decreases (a mountain array). Can you still use the 'eliminate half' concept to find the peak? Why?",
+  "retrievalPrompt": "What is the exact condition required to eliminate half the search space in an array, and how do you safely calculate the midpoint in Java?"
+}

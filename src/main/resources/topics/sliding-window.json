@@ -1,0 +1,22 @@
+{
+  "topicId": "sliding-window",
+  "title": "Sliding Window",
+  "learningObjectives": "Understand how to maintain a contiguous subset of elements (a window) using two boundaries, and efficiently update the window's state by adding the new element and removing the old element as the boundaries shift.",
+  "prerequisites": "two-pointers",
+  "intuition": "When analyzing contiguous subarrays or substrings, recomputing the state (like a sum or character count) from scratch for every possible window is redundant. We can reuse the work from the previous window by simply factoring in the element that entered the window and factoring out the element that left the window.",
+  "formalModel": "Input: Array or String A. Constraints: O(N) time, contiguous segment. Variables: left = 0, right = 0, state (e.g., sum, hash map). Movement: Expand by incrementing right and updating state. If state becomes invalid, contract by incrementing left and updating state until valid again. Invariant: The window [left, right] always represents a contiguous segment, and we track its validity.",
+  "recognitionSignals": "Contiguous subarray, contiguous substring, longest/shortest valid segment, fixed-size window, variable-size window, repeated recomputation over overlapping ranges.",
+  "derivation": "A brute-force approach checks every possible subarray, doing O(N) work per subarray, leading to O(N^2) or O(N^3). Since the subarrays overlap, the only difference between window [L, R] and [L, R+1] is A[R+1]. The window contracts (L moves) only when the condition is violated, ensuring L and R both move monotonically forward.",
+  "pseudocode": "left = 0, best = 0, state = empty\nfor right from 0 to A.length - 1:\n  state.add(A[right])\n  while not state.isValid():\n    state.remove(A[left])\n    left++\n  best = max(best, right - left + 1)\nreturn best",
+  "javaImplementation": "public int lengthOfLongestSubstring(String s) {\n    int left = 0, maxLength = 0;\n    Set<Character> window = new HashSet<>();\n    for (int right = 0; right < s.length(); right++) {\n        while (window.contains(s.charAt(right))) {\n            window.remove(s.charAt(left));\n            left++;\n        }\n        window.add(s.charAt(right));\n        maxLength = Math.max(maxLength, right - left + 1);\n    }\n    return maxLength;\n}",
+  "complexity": "Time: O(N) because both the left and right pointers only move forward. Each element is added to the window at most once and removed at most once. Space: O(K) where K is the size of the state tracking (e.g., character set size).",
+  "correctness": "Loop invariant: At the end of each outer loop iteration, the window [left, right] is the longest VALID window ending exactly at index `right`.",
+  "edgeCases": "Empty input, string with one character, all unique characters, all identical characters, duplicate-heavy input, longest window at the beginning/end.",
+  "misconceptions": "Thinking Sliding Window requires O(N^2) because of the nested while loop. Contracting the window too early or too late. Updating the maximum length inside the while loop instead of outside when finding the longest valid window.",
+  "counterexamples": "String 'pwwkew'. If we don't contract properly when seeing the second 'w', our window becomes 'pww' which is invalid. If we clear the whole window instead of contracting from the left, we might lose 'wke' and restart from 'k'.",
+  "commonWrongApproaches": "Using nested loops to check all subarrays (O(N^2)). Using indexOf() inside the loop which costs O(N) implicitly. Forgetting to remove the left element from the state tracker when incrementing left.",
+  "comparisonWithAlternatives": "Brute force: O(N^2) or O(N^3) time. Sliding Window: O(N) time (optimal) by amortizing the work of the inner loop.",
+  "practiceProblems": "1. Longest Substring Without Repeating Characters, 2. Minimum Size Subarray Sum, 3. Find All Anagrams in a String.",
+  "transferProblem": "Given an array of positive integers and an integer 'target', find the minimal length of a contiguous subarray of which the sum is greater than or equal to 'target'. If there is no such subarray, return 0. Explain how variable-size sliding window applies.",
+  "retrievalPrompt": "Why is the time complexity of a variable-size sliding window O(N) even though there is a `while` loop inside a `for` loop?"
+}

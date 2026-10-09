@@ -1,0 +1,138 @@
+[
+  {
+    "questionId": "sw-concept-1",
+    "topicId": "sliding-window",
+    "targetStage": "CONCEPT_ASSESSMENT",
+    "difficulty": "EASY",
+    "isRemediation": false,
+    "content": "What is the primary advantage of the Sliding Window technique over a brute-force approach when analyzing contiguous subarrays?",
+    "expectedEvidence": "The learner should explain that sliding window reuses computation from the previous window by only adding the new element and removing the old element, rather than recomputing the entire subarray from scratch.",
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "sw-recog-1",
+    "topicId": "sliding-window",
+    "targetStage": "CONCEPT_ASSESSMENT",
+    "difficulty": "MEDIUM",
+    "isRemediation": false,
+    "content": "You are given a string and asked to find the length of the longest substring with at most two distinct characters. What keywords or constraints in this problem suggest that a variable-size sliding window is a good approach?",
+    "expectedEvidence": "The learner should identify 'longest substring' (contiguous constraint) and 'at most two distinct characters' (a trackable validity condition) as signals for sliding window.",
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "sw-derive-1",
+    "topicId": "sliding-window",
+    "targetStage": "DERIVE",
+    "difficulty": "MEDIUM",
+    "isRemediation": false,
+    "content": "Consider the problem: 'Longest Substring Without Repeating Characters'. If your current window is valid, you expand by moving the right boundary. When and why do you move the left boundary? What invariant are you trying to restore?",
+    "expectedEvidence": "The learner must state that the left boundary moves when a duplicate character enters the window (making it invalid). The left boundary moves forward to remove the duplicate, restoring the invariant that the window contains only unique characters.",
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "sw-derive-rem-1",
+    "topicId": "sliding-window",
+    "targetStage": "DERIVE",
+    "difficulty": "EASY",
+    "isRemediation": true,
+    "content": "It seems you're struggling with when to move the pointers. Let's simplify. If you are keeping track of the sum of a window, and the sum exceeds your allowed maximum, which pointer should move to reduce the sum: the left one or the right one? Why?",
+    "expectedEvidence": "The learner should identify that the left pointer must move to remove elements from the window and thus reduce the sum.",
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "sw-impl-1",
+    "topicId": "sliding-window",
+    "targetStage": "IMPLEMENTATION",
+    "difficulty": "MEDIUM",
+    "isRemediation": false,
+    "content": "Write the Java code for 'Longest Substring Without Repeating Characters'. Return the integer length of the longest substring.",
+    "expectedEvidence": "public int lengthOfLongestSubstring(String s) { ... }",
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "sw-impl-hard-1",
+    "topicId": "sliding-window",
+    "targetStage": "IMPLEMENTATION",
+    "difficulty": "HARD",
+    "isRemediation": false,
+    "content": "Write the Java code for 'Longest Substring Without Repeating Characters' but optimize it by using a HashMap to instantly jump the left pointer to `map.get(duplicate) + 1` instead of moving it one by one.",
+    "expectedEvidence": "public int lengthOfLongestSubstring(String s) { ... using a map to skip the left pointer forward ... }",
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "sw-impl-rem-1",
+    "topicId": "sliding-window",
+    "targetStage": "IMPLEMENTATION",
+    "difficulty": "EASY",
+    "isRemediation": true,
+    "content": "Let's practice the basic mechanics. Write a Java method that uses a fixed-size sliding window of size K to find the maximum sum of any contiguous subarray of size K in an array of integers.",
+    "expectedEvidence": "public int maxSum(int[] arr, int k) { ... }",
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "sw-expl-1",
+    "topicId": "sliding-window",
+    "targetStage": "EXPLANATION",
+    "difficulty": "MEDIUM",
+    "isRemediation": false,
+    "content": "In your sliding window implementation, you have a `while` loop nested inside a `for` loop. Explain why the overall time complexity is still O(N) rather than O(N^2).",
+    "expectedEvidence": "The learner must explain that each element is added to the window at most once (by the outer loop) and removed at most once (by the inner loop), so the inner loop runs at most N times total across all iterations.",
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "sw-counter-1",
+    "topicId": "sliding-window",
+    "targetStage": "COUNTEREXAMPLE",
+    "difficulty": "MEDIUM",
+    "isRemediation": false,
+    "content": "Consider the string 'abba'. Trace your left and right boundaries step-by-step for the longest substring without repeating characters. Show how your algorithm handles the second 'a'.",
+    "expectedEvidence": "The learner should trace the state: when reaching the second 'a' at index 3, the left pointer should jump. If using a map, they must explain that they only jump left forward, not backward (e.g., left = Math.max(left, map.get('a') + 1)).",
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "sw-opt-1",
+    "topicId": "sliding-window",
+    "targetStage": "OPTIMIZE",
+    "difficulty": "MEDIUM",
+    "isRemediation": false,
+    "content": "If you used a HashSet to track characters, your left pointer moves one step at a time in a while loop. How can you optimize this to avoid the inner while loop completely?",
+    "expectedEvidence": "The learner should describe using a HashMap (or an int array mapping char to index) to store the last seen index of each character, allowing the left pointer to jump directly to `last_seen + 1`.",
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "sw-trans-1",
+    "topicId": "sliding-window",
+    "targetStage": "TRANSFER",
+    "difficulty": "HARD",
+    "isRemediation": false,
+    "content": "Given an array of positive integers and a target sum, find the minimal length of a contiguous subarray whose sum is >= target. Explain how variable-size sliding window applies and derive the window conditions.",
+    "expectedEvidence": "The learner should recognize this as a variable-size sliding window where we expand right to increase the sum, and when sum >= target (the invalid/valid condition), we record the length and contract left to find a smaller valid window.",
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "sw-misc-wrong-contraction",
+    "topicId": "sliding-window",
+    "targetStage": "DERIVE",
+    "difficulty": "MEDIUM",
+    "isRemediation": false,
+    "targetsMisconception": "WRONG_CONTRACTION",
+    "content": "You recently struggled with how to contract the window. When a window becomes invalid, do we clear the entire window and start over from the right pointer, or do we shrink it from the left? Why?",
+    "expectedEvidence": "We shrink it from the left one step at a time (or jump to the conflict). If we clear it entirely, we might skip over valid substrings that started in the middle of our old window.",
+    "allowedMisconceptions": [
+      "WRONG_CONTRACTION"
+    ]
+  },
+  {
+    "questionId": "sw-misc-invariant",
+    "topicId": "sliding-window",
+    "targetStage": "IMPLEMENTATION",
+    "difficulty": "MEDIUM",
+    "isRemediation": false,
+    "targetsMisconception": "WINDOW_INVARIANT",
+    "content": "You had trouble maintaining the window state. Write just the block of code inside the `for` loop that updates a `HashMap<Character, Integer> counts` when the `right` pointer expands and when the `left` pointer contracts.",
+    "expectedEvidence": "counts.put(c_right, counts.getOrDefault(c_right, 0) + 1); while (invalid) { char c_left = s.charAt(left); counts.put(c_left, counts.get(c_left) - 1); if (counts.get(c_left) == 0) counts.remove(c_left); left++; }",
+    "allowedMisconceptions": [
+      "WINDOW_INVARIANT"
+    ]
+  }
+]

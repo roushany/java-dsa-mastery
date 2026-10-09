@@ -1,0 +1,133 @@
+{
+  "topics": [
+    {
+      "topicId": "foundations",
+      "title": "Foundations",
+      "prerequisites": [],
+      "difficulty": "BEGINNER"
+    },
+    {
+      "topicId": "arrays",
+      "title": "Arrays",
+      "prerequisites": ["foundations"],
+      "difficulty": "BEGINNER"
+    },
+    {
+      "topicId": "strings",
+      "title": "Strings",
+      "prerequisites": ["arrays"],
+      "difficulty": "BEGINNER"
+    },
+    {
+      "topicId": "linear-search",
+      "title": "Linear Search",
+      "prerequisites": ["strings"],
+      "difficulty": "BEGINNER",
+      "stageRequirements": {
+        "OPTIMIZE": "NOT_APPLICABLE"
+      }
+    },
+    {
+      "topicId": "binary-search",
+      "title": "Binary Search",
+      "prerequisites": ["linear-search"],
+      "difficulty": "BEGINNER"
+    },
+    {
+      "topicId": "two-pointers",
+      "title": "Two Pointers",
+      "prerequisites": ["binary-search"],
+      "difficulty": "INTERMEDIATE"
+    },
+    {
+      "topicId": "prefix-sum",
+      "title": "Prefix Sum",
+      "prerequisites": ["two-pointers"],
+      "difficulty": "INTERMEDIATE"
+    },
+    {
+      "topicId": "sliding-window",
+      "title": "Sliding Window",
+      "prerequisites": ["two-pointers"],
+      "difficulty": "INTERMEDIATE"
+    },
+    {
+      "topicId": "hashing",
+      "title": "Hashing",
+      "prerequisites": ["sliding-window"],
+      "difficulty": "INTERMEDIATE"
+    },
+    {
+      "topicId": "sorting",
+      "title": "Sorting",
+      "prerequisites": ["hashing"],
+      "difficulty": "INTERMEDIATE"
+    },
+    {
+      "topicId": "linked-lists",
+      "title": "Linked Lists",
+      "prerequisites": ["sorting"],
+      "difficulty": "INTERMEDIATE"
+    },
+    {
+      "topicId": "stacks",
+      "title": "Stacks",
+      "prerequisites": ["linked-lists"],
+      "difficulty": "INTERMEDIATE"
+    },
+    {
+      "topicId": "queues",
+      "title": "Queues",
+      "prerequisites": ["stacks"],
+      "difficulty": "INTERMEDIATE"
+    },
+    {
+      "topicId": "trees",
+      "title": "Trees",
+      "prerequisites": ["queues"],
+      "difficulty": "INTERMEDIATE"
+    },
+    {
+      "topicId": "heaps",
+      "title": "Heaps",
+      "prerequisites": ["trees"],
+      "difficulty": "INTERMEDIATE"
+    },
+    {
+      "topicId": "recursion",
+      "title": "Recursion",
+      "prerequisites": ["heaps"],
+      "difficulty": "INTERMEDIATE"
+    },
+    {
+      "topicId": "backtracking",
+      "title": "Backtracking",
+      "prerequisites": ["recursion"],
+      "difficulty": "ADVANCED"
+    },
+    {
+      "topicId": "graphs",
+      "title": "Graphs",
+      "prerequisites": ["backtracking"],
+      "difficulty": "ADVANCED"
+    },
+    {
+      "topicId": "greedy",
+      "title": "Greedy",
+      "prerequisites": ["graphs"],
+      "difficulty": "ADVANCED"
+    },
+    {
+      "topicId": "dynamic-programming",
+      "title": "Dynamic Programming",
+      "prerequisites": ["greedy"],
+      "difficulty": "ADVANCED"
+    },
+    {
+      "topicId": "advanced",
+      "title": "Advanced",
+      "prerequisites": ["dynamic-programming"],
+      "difficulty": "ADVANCED"
+    }
+  ]
+}

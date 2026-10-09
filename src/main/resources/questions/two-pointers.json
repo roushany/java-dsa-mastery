@@ -1,0 +1,110 @@
+[
+  {
+    "questionId": "tp-q1",
+    "topicId": "two-pointers",
+    "targetStage": "CONCEPT_ASSESSMENT",
+    "difficulty": "EASY",
+    "content": "Why is the Two Pointers technique on a sorted array more efficient than checking every pair?",
+    "expectedEvidence": "Because the sorted property allows us to definitively eliminate a pointer at each step, reducing O(N^2) to O(N).",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "tp-q2",
+    "topicId": "two-pointers",
+    "targetStage": "DERIVE",
+    "difficulty": "MEDIUM",
+    "content": "In Two Sum II, if the sum of elements at left and right pointers is too large, what must you do and why?",
+    "expectedEvidence": "Decrement the right pointer to try a smaller sum, since the array is sorted.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "tp-q3",
+    "topicId": "two-pointers",
+    "targetStage": "IMPLEMENTATION",
+    "difficulty": "MEDIUM",
+    "content": "Implement Two Sum II returning the 1-indexed positions of the two numbers.",
+    "expectedEvidence": "While left < right, check sum. If sum < target left++, if sum > target right--, else return indices.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "tp-q4",
+    "topicId": "two-pointers",
+    "targetStage": "DEBUGGING",
+    "difficulty": "MEDIUM",
+    "content": "Why is your loop condition left < right and not left <= right for finding two distinct elements?",
+    "expectedEvidence": "Because we need two distinct elements, so left cannot equal right.",
+    "targetsMisconception": "overlap",
+    "isRemediation": true,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "overlap"
+    ]
+  },
+  {
+    "questionId": "tp-q5",
+    "topicId": "two-pointers",
+    "targetStage": "EXPLANATION",
+    "difficulty": "MEDIUM",
+    "content": "Explain why this algorithm guarantees finding the pair if it exists, without skipping over it.",
+    "expectedEvidence": "By moving only the pointer that must be moved to approach the target, we never skip the valid pair.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "tp-q6",
+    "topicId": "two-pointers",
+    "targetStage": "COUNTEREXAMPLE",
+    "difficulty": "MEDIUM",
+    "content": "Give an example of an array where moving both pointers at once when sum != target would fail.",
+    "expectedEvidence": "Target 5. Array: [1, 2, 4, 6]. Left=0, Right=3. Sum=7. Moving both gives Left=1, Right=2 (Sum=6). We missed [1,4].",
+    "targetsMisconception": "moving-both",
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "moving-both"
+    ]
+  },
+  {
+    "questionId": "tp-q7",
+    "topicId": "two-pointers",
+    "targetStage": "OPTIMIZE",
+    "difficulty": "HARD",
+    "content": "Can Two Sum II be further optimized in time complexity below O(N)?",
+    "expectedEvidence": "No, because we might need to examine every element at least once.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "tp-q8",
+    "topicId": "two-pointers",
+    "targetStage": "TRANSFER",
+    "difficulty": "HARD",
+    "content": "How would you use two pointers to square elements of a sorted array (which may contain negative numbers) and return a new sorted array?",
+    "expectedEvidence": "Pointers at both ends (most negative and most positive), compare squares, place largest at the end of new array.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": true,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  }
+]

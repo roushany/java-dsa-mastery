@@ -1,0 +1,108 @@
+[
+  {
+    "questionId": "ls-q1",
+    "topicId": "linear-search",
+    "targetStage": "CONCEPT_ASSESSMENT",
+    "difficulty": "EASY",
+    "content": "Why is it impossible to eliminate half of an unsorted array like we do in Binary Search?",
+    "expectedEvidence": "Because without sorting, any element could be anywhere, so no range can be safely excluded.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "ls-q2",
+    "topicId": "linear-search",
+    "targetStage": "DERIVE",
+    "difficulty": "MEDIUM",
+    "content": "Given an array, how would you systematically guarantee you find the target if it exists?",
+    "expectedEvidence": "Start at index 0 and check every element until the end.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "ls-q3",
+    "topicId": "linear-search",
+    "targetStage": "IMPLEMENTATION",
+    "difficulty": "MEDIUM",
+    "content": "Write a Java method to perform a linear search returning the index.",
+    "expectedEvidence": "for loop from 0 to length-1, checking arr[i] == target.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "ls-q4",
+    "topicId": "linear-search",
+    "targetStage": "IMPLEMENTATION",
+    "difficulty": "EASY",
+    "content": "Write a basic linear search (Remediation).",
+    "expectedEvidence": "Basic loop.",
+    "targetsMisconception": "loop-syntax",
+    "isRemediation": true,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "loop-syntax"
+    ]
+  },
+  {
+    "questionId": "ls-q5",
+    "topicId": "linear-search",
+    "targetStage": "EXPLANATION",
+    "difficulty": "MEDIUM",
+    "content": "Explain your implementation.",
+    "expectedEvidence": "Explains iteration and termination condition.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "ls-q6",
+    "topicId": "linear-search",
+    "targetStage": "COUNTEREXAMPLE",
+    "difficulty": "MEDIUM",
+    "content": "Provide a counterexample where an early exit fails.",
+    "expectedEvidence": "Target at the end of the array.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "ls-q7",
+    "topicId": "linear-search",
+    "targetStage": "TRANSFER",
+    "difficulty": "HARD",
+    "content": "Find the first occurrence of a negative number in an array.",
+    "expectedEvidence": "Use linear search, break when arr[i] < 0.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": true,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "ls-q8",
+    "topicId": "linear-search",
+    "targetStage": "TRANSFER",
+    "difficulty": "MEDIUM",
+    "content": "Find first negative number (Easier transfer fallback).",
+    "expectedEvidence": "Linear search < 0",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": true,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "topicId": "linear-search",
+  "title": "Linear Search",
+  "learningObjectives": "Understand how to sequentially search an array. Identify when linear search is necessary (unsorted data).",
+  "prerequisites": "Basic understanding of arrays and loops.",
+  "intuition": "Like looking for a specific book on a messy desk by checking each item one by one.",
+  "formalModel": "f(A, target) = i if A[i] == target else -1, ∀ i ∈ [0, n-1]",
+  "recognitionSignals": "Data is unsorted, or no auxiliary index exists.",
+  "derivation": "Start at index 0. If current matches target, return index. Else increment index. If end reached, return -1.",
+  "pseudocode": "for (int i=0; i<A.length; i++) { if (A[i] == target) return i; } return -1;",
+  "javaImplementation": "public int search(int[] arr, int target) {\n    for (int i = 0; i < arr.length; i++) {\n        if (arr[i] == target) return i;\n    }\n    return -1;\n}",
+  "complexity": "Time: O(N) worst case, O(1) best case. Space: O(1).",
+  "correctness": "Loop invariant: at start of iteration i, target is not in A[0..i-1].",
+  "edgeCases": "Empty array, array with one element, target at first index, target at last index, target not present.",
+  "misconceptions": "Believing it works efficiently for sorted arrays (misconception).",
+  "counterexamples": "Counterexample to binary search on unsorted data: [5, 2, 8, 1], searching for 8.",
+  "commonWrongApproaches": "Trying to sort first to use binary search (O(N log N) > O(N)).",
+  "comparisonWithAlternatives": "Binary search (requires sorted). Hash map (requires O(N) space).",
+  "practiceProblems": "1. Find first index. 2. Find last index.",
+  "transferProblem": "Find the first occurrence of a negative number in an array.",
+  "retrievalPrompt": "When should you prefer Linear Search over Binary Search?"
+}

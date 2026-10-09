@@ -1,0 +1,22 @@
+{
+  "topicId": "two-pointers",
+  "title": "Two Pointers",
+  "learningObjectives": "Understand how to maintain and move two indices (pointers) simultaneously to traverse a structure and solve problems efficiently, primarily on sorted data or for in-place operations.",
+  "prerequisites": "arrays",
+  "intuition": "Instead of repeatedly scanning the same range with nested loops (brute force), we can start pointers at opposite ends (or the same end) and move them towards each other systematically to eliminate invalid configurations based on a sorted invariant.",
+  "formalModel": "Input: Array A (often sorted). Constraints: O(N) time, O(1) space. Variables: L = 0, R = n-1. Movement: Loop while L < R. If relation(A[L], A[R]) > target, R--. If relation < target, L++. Invariant: Target pair, if it exists, is always within [L, R].",
+  "recognitionSignals": "Sorted array or string, pair or boundary relationship, opposite-end movement, same-direction slow/fast traversal, maintaining a relationship between two indices.",
+  "derivation": "Because the array is sorted, the maximum possible sum involves the rightmost element. If A[L] + A[R] is too large, increasing L only makes it larger. The ONLY safe movement to decrease the sum is to decrement R. If the sum is too small, the ONLY safe movement is to increment L.",
+  "pseudocode": "L = 0, R = A.length - 1\nwhile L < R:\n  sum = A[L] + A[R]\n  if sum == target: return [L, R]\n  if sum < target: L++\n  else: R--\nreturn not_found",
+  "javaImplementation": "public int[] twoSumSorted(int[] numbers, int target) {\n    int left = 0;\n    int right = numbers.length - 1;\n    while (left < right) {\n        int sum = numbers[left] + numbers[right];\n        if (sum == target) return new int[]{left + 1, right + 1};\n        else if (sum < target) left++;\n        else right--;\n    }\n    return new int[]{-1, -1};\n}",
+  "complexity": "Time: O(N) because each element is visited at most once. Space: O(1) auxiliary space.",
+  "correctness": "Loop invariant: The search space [left, right] always contains the valid pair if one exists. Moving left eliminates left because it's too small for even the largest right. Moving right eliminates right because it's too large for even the smallest left.",
+  "edgeCases": "Empty array, array with one element, no valid pair exists, duplicate values summing to target, all values equal, boundary conditions where left == right.",
+  "misconceptions": "Believing Two Pointers works on unsorted arrays for finding specific pairs. Confusing while(left < right) with while(left <= right).",
+  "counterexamples": "Array [3, 2, 4], target 6. If we use two pointers on this unsorted array, L=0 (3), R=2 (4). Sum=7. 7 > 6, so we decrement R to 1 (2). L=0 (3), R=1 (2). Sum=5. 5 < 6, increment L. L=1, R=1, loop ends. Fails to find pair! Must be sorted.",
+  "commonWrongApproaches": "Using nested loops (O(N^2)). Using a HashMap (O(N) space) when O(1) space is requested for a sorted array. Doing left <= right which processes the same element twice.",
+  "comparisonWithAlternatives": "Brute force: O(N^2) time, O(1) space. HashMap: O(N) time, O(N) space. Two Pointers: O(N) time, O(1) space (optimal).",
+  "practiceProblems": "1. Two Sum II - Input Array Is Sorted, 2. Valid Palindrome, 3. Container With Most Water.",
+  "transferProblem": "Given an array of integers that is already sorted in non-decreasing order (which may include negative numbers), return an array of the squares of each number sorted in non-decreasing order. Explain how Two Pointers can solve this in O(N) time.",
+  "retrievalPrompt": "Why does the Two Pointers technique safely eliminate elements without missing a valid pair in a sorted array?"
+}
