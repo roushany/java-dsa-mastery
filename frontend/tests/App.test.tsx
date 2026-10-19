@@ -48,6 +48,7 @@ describe('App Integration', () => {
     vi.spyOn(useHealthCheckModule, 'useHealthCheck').mockReturnValue({
       health: mockHealth,
       isLoading: false,
+      isWakingUp: false,
       error: null,
       refetch: vi.fn(),
     });
@@ -63,6 +64,7 @@ describe('App Integration', () => {
     vi.spyOn(useHealthCheckModule, 'useHealthCheck').mockReturnValue({
       health: mockHealth,
       isLoading: false,
+      isWakingUp: false,
       error: null,
       refetch: vi.fn(),
     });
@@ -102,6 +104,7 @@ describe('App Integration', () => {
     vi.spyOn(useHealthCheckModule, 'useHealthCheck').mockReturnValue({
       health: mockHealth,
       isLoading: false,
+      isWakingUp: false,
       error: null,
       refetch: vi.fn(),
     });
@@ -148,6 +151,7 @@ describe('App Integration', () => {
     vi.spyOn(useHealthCheckModule, 'useHealthCheck').mockReturnValue({
       health: mockHealth,
       isLoading: false,
+      isWakingUp: false,
       error: null,
       refetch: vi.fn(),
     });
@@ -173,6 +177,7 @@ describe('App Integration', () => {
     vi.spyOn(useHealthCheckModule, 'useHealthCheck').mockReturnValue({
       health: null,
       isLoading: false,
+      isWakingUp: false,
       error: new ApiError(503, {
         error: 'SERVICE_UNAVAILABLE',
         message: 'Backend server starting',
@@ -190,5 +195,22 @@ describe('App Integration', () => {
     const retryBtn = screen.getByRole('button', { name: 'Retry Connection' });
     await user.click(retryBtn);
     expect(mockRefetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('displays polite waking banner and suppresses error banner while isWakingUp is true', () => {
+    vi.spyOn(useHealthCheckModule, 'useHealthCheck').mockReturnValue({
+      health: null,
+      isLoading: true,
+      isWakingUp: true,
+      error: null,
+      refetch: vi.fn(),
+    });
+
+    render(<App />);
+
+    expect(screen.getByTestId('backend-waking-banner')).toBeInTheDocument();
+    expect(screen.getByText('Backend Waking Up')).toBeInTheDocument();
+    expect(screen.getByText(/free hosting service spins down/i)).toBeInTheDocument();
+    expect(screen.queryByText('Backend Connection Failed')).not.toBeInTheDocument();
   });
 });

@@ -120,6 +120,22 @@ describe('Navigation component', () => {
       const backendBadge = screen.getByTestId('backend-status');
       expect(backendBadge).toHaveTextContent('Backend Offline');
     });
+
+    it('displays "Waking Up..." when isWakingUp is true', () => {
+      render(
+        <Navigation
+          currentTab="dashboard"
+          onSelectTab={vi.fn()}
+          health={null}
+          isLoadingHealth={true}
+          isWakingUp={true}
+          healthError={null}
+        />
+      );
+
+      const backendBadge = screen.getByTestId('backend-status');
+      expect(backendBadge).toHaveTextContent('Waking Up...');
+    });
   });
 
   describe('Independent AI Configuration Indicator', () => {

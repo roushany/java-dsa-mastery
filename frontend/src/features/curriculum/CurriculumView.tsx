@@ -2,19 +2,22 @@ import React, { useState } from 'react';
 import { useCurriculum } from '../../hooks/useCurriculum';
 import { ApiClient, defaultApiClient } from '../../api/client';
 import { ApiError } from '../../api/errors';
-import { SessionResponse, TopicSummaryDto } from '../../api/types';
+import { HealthResponse, SessionResponse, TopicSummaryDto } from '../../api/types';
 import { saveSession } from '../../storage/sessionIndexStorage';
 
 interface CurriculumViewProps {
   client?: ApiClient;
+  health?: HealthResponse | null;
   onSessionStarted?: (session: SessionResponse) => void;
 }
 
 export const CurriculumView: React.FC<CurriculumViewProps> = ({
   client = defaultApiClient,
+  health,
   onSessionStarted,
 }) => {
-  const { topics, isLoading, error, refetch } = useCurriculum(client);
+  const isHealthy = health?.status === 'UP';
+  const { topics, isLoading, error, refetch } = useCurriculum(client, isHealthy);
   const [startingTopicId, setStartingTopicId] = useState<string | null>(null);
   const [startError, setStartError] = useState<ApiError | null>(null);
 

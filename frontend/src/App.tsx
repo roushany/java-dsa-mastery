@@ -11,7 +11,7 @@ import { SessionResponse } from './api/types';
 export function App() {
   const [currentTab, setCurrentTab] = useState<NavigationTab>('dashboard');
   const [activeSession, setActiveSession] = useState<SessionResponse | null>(null);
-  const { health, isLoading, error, refetch } = useHealthCheck();
+  const { health, isLoading, isWakingUp, error, refetch } = useHealthCheck();
 
   const handleSessionStartedOrResumed = (session: SessionResponse) => {
     setActiveSession(session);
@@ -25,12 +25,37 @@ export function App() {
         onSelectTab={setCurrentTab}
         health={health}
         isLoadingHealth={isLoading}
+        isWakingUp={isWakingUp}
         healthError={error}
       />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Backend Waking Up Notice */}
+        {isWakingUp && (
+          <div
+            className="mb-8 p-4 rounded-lg bg-amber-950/40 border border-amber-800/60 text-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+            role="status"
+            aria-live="polite"
+            data-testid="backend-waking-banner"
+          >
+            <div>
+              <h3 className="font-semibold text-amber-100 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                Backend Waking Up
+              </h3>
+              <p className="text-sm text-amber-300 mt-1">
+                The free hosting service spins down during periods of inactivity and may take 30–50 seconds to start. Reconnecting automatically...
+              </p>
+            </div>
+            <div className="text-xs font-mono text-amber-400 flex items-center gap-1.5 self-end sm:self-auto">
+              <span className="w-3.5 h-3.5 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+              <span>Waiting for server</span>
+            </div>
+          </div>
+        )}
+
         {/* Backend Connection Warning Banner */}
-        {error && (
+        {!isWakingUp && error && (
           <div
             className="mb-8 p-4 rounded-lg bg-red-950/40 border border-red-800/60 text-red-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
             role="alert"
@@ -40,7 +65,7 @@ export function App() {
                 <span>⚠</span> Backend Connection Failed
               </h3>
               <p className="text-sm text-red-300 mt-1">
-                {error.message} (Status {error.status || 'Network Error'}). Ensure the Spring Boot backend is running on port 8080.
+                {error.message} (Status {error.status || 'Network Error'}). Unable to reach the backend service. Please check your connection or retry.
               </p>
             </div>
             <button
@@ -63,7 +88,10 @@ export function App() {
         )}
 
         {currentTab === 'curriculum' && (
-          <CurriculumView onSessionStarted={handleSessionStartedOrResumed} />
+          <CurriculumView
+            health={health}
+            onSessionStarted={handleSessionStartedOrResumed}
+          />
         )}
 
         {currentTab === 'learning' && (

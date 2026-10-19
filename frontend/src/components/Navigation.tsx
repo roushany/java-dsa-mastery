@@ -9,6 +9,7 @@ interface NavigationProps {
   onSelectTab: (tab: NavigationTab) => void;
   health: HealthResponse | null;
   isLoadingHealth: boolean;
+  isWakingUp?: boolean;
   healthError: ApiError | null;
 }
 
@@ -17,6 +18,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   onSelectTab,
   health,
   isLoadingHealth,
+  isWakingUp = false,
   healthError,
 }) => {
   const tabs: Array<{ id: NavigationTab; label: string }> = [
@@ -65,7 +67,16 @@ export const Navigation: React.FC<NavigationProps> = ({
           {/* Independent Backend Connectivity & AI Status Indicators */}
           <div className="flex items-center gap-2 text-xs font-mono">
             {/* 1. Independent Backend Connectivity Indicator */}
-            {isLoadingHealth ? (
+            {isWakingUp ? (
+              <span
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-950/60 border border-amber-800/50 text-amber-300"
+                title="Free cloud backend is waking up from sleep. Reconnecting automatically..."
+                data-testid="backend-status"
+              >
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                <span>Waking Up...</span>
+              </span>
+            ) : isLoadingHealth ? (
               <span className="inline-flex items-center gap-1.5 text-slate-400 px-2 py-1">
                 <span className="w-2 h-2 rounded-full bg-slate-500 animate-pulse" />
                 Connecting...

@@ -55,11 +55,13 @@ export class ApiClient {
   /**
    * GET /api/v1/health (Public)
    */
-  public async getHealth(): Promise<HealthResponse> {
+  public async getHealth(options: { timeoutMs?: number; signal?: AbortSignal } = {}): Promise<HealthResponse> {
     return this.request<HealthResponse>({
       endpoint: ENDPOINTS.health(),
       method: 'GET',
       requiresAuth: false,
+      timeoutMs: options.timeoutMs,
+      signal: options.signal,
     });
   }
 
@@ -154,6 +156,8 @@ export class ApiClient {
     body?: unknown;
     requiresAuth: boolean;
     explicitToken?: string;
+    timeoutMs?: number;
+    signal?: AbortSignal;
   }): Promise<T> {
     const url = `${this.baseUrl}${options.endpoint}`;
     const headers = new Headers();
@@ -177,8 +181,21 @@ export class ApiClient {
       });
     }
 
+    const effectiveTimeout = options.timeoutMs ?? this.timeoutMs;
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), this.timeoutMs);
+    const timeoutId = setTimeout(() => controller.abort(), effectiveTimeout);
+
+    const onExternalAbort = () => {
+      controller.abort();
+    };
+
+    if (options.signal) {
+      if (options.signal.aborted) {
+        controller.abort();
+      } else {
+        options.signal.addEventListener('abort', onExternalAbort, { once: true });
+      }
+    }
 
     let response: Response;
     try {
@@ -190,14 +207,24 @@ export class ApiClient {
       });
     } catch (err: unknown) {
       clearTimeout(timeoutId);
+      if (options.signal) {
+        options.signal.removeEventListener('abort', onExternalAbort);
+      }
+
+      if (options.signal?.aborted) {
+        throw ApiError.networkError(new Error('Request cancelled by caller'));
+      }
 
       if (err instanceof Error && err.name === 'AbortError') {
-        throw ApiError.timeout(this.timeoutMs);
+        throw ApiError.timeout(effectiveTimeout);
       }
 
       throw ApiError.networkError(err instanceof Error ? err : undefined);
     } finally {
       clearTimeout(timeoutId);
+      if (options.signal) {
+        options.signal.removeEventListener('abort', onExternalAbort);
+      }
     }
 
     // Intercept and persist newly issued or rotated capability tokens

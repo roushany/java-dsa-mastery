@@ -578,5 +578,36 @@ describe('ApiClient', () => {
         expect(apiErr.isRetryable).toBe(true);
       }
     });
+
+    it('getHealth respects custom timeoutMs and signal options', async () => {
+      const mockHealth: HealthResponse = {
+        status: 'UP',
+        version: '1.0.0',
+        activeTopics: 7,
+        aiConfigured: true,
+      };
+      mockFetch.mockResolvedValueOnce(createMockResponse(200, mockHealth));
+
+      const controller = new AbortController();
+      const res = await client.getHealth({ timeoutMs: 5000, signal: controller.signal });
+      expect(res).toEqual(mockHealth);
+      expect(mockFetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('mutation POST operations (startSession, submitAnswer, requestHint) do NOT perform automatic retry on failure', async () => {
+      mockFetch.mockRejectedValue(new TypeError('Failed to fetch'));
+
+      // 1. startSession
+      await expect(client.startSession({ topicId: 'linear-search' })).rejects.toThrow();
+      expect(mockFetch).toHaveBeenCalledTimes(1);
+
+      // 2. submitAnswer
+      await expect(client.submitAnswer('session-1', { attemptId: 'att-1', answer: 'val' })).rejects.toThrow();
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+
+      // 3. requestHint
+      await expect(client.requestHint('session-1', { attemptId: 'att-1' })).rejects.toThrow();
+      expect(mockFetch).toHaveBeenCalledTimes(3);
+    });
   });
 });
