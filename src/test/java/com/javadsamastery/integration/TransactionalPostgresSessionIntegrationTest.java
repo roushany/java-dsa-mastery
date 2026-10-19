@@ -90,6 +90,8 @@ class TransactionalPostgresSessionIntegrationTest {
         Flyway flyway = Flyway.configure()
                 .dataSource(JDBC_URL, USERNAME, PASSWORD)
                 .locations("classpath:db/migration")
+                .schemas("javadsa")
+                .defaultSchema("javadsa")
                 .load();
         flyway.migrate();
     }

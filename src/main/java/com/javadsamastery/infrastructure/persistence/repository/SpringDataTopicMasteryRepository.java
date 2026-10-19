@@ -21,7 +21,7 @@ public interface SpringDataTopicMasteryRepository extends JpaRepository<TopicMas
             @Param("topicId") String topicId);
 
     @org.springframework.data.jpa.repository.Modifying
-    @Query(value = "INSERT INTO topic_mastery_snapshots (learner_id, topic_id, mastery_level, independent_concept_passes, " +
+    @Query(value = "INSERT INTO javadsa.topic_mastery_snapshots (learner_id, topic_id, mastery_level, independent_concept_passes, " +
                    "independent_implementation_passes, transfer_passes, retrieval_passes, consecutive_failures, " +
                    "active_misconceptions, updated_at, version) " +
                    "VALUES (:learnerId, :topicId, 'NOVICE', 0, 0, 0, 0, 0, '[]'::jsonb, NOW(), 0) " +
