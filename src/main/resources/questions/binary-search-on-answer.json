@@ -1,0 +1,135 @@
+[
+  {
+    "questionId": "bsa-q1",
+    "topicId": "binary-search-on-answer",
+    "targetStage": "CONCEPT_ASSESSMENT",
+    "difficulty": "EASY",
+    "content": "In standard Binary Search, we search for a target value in a sorted array. In Binary Search on Answer, what exactly are we searching, and why don't we need the input array to be sorted?",
+    "expectedEvidence": "We are searching a numerical range of possible answers (the answer space). The input array doesn't need to be sorted because we are binary searching the contiguous, monotonic range of numeric answers, not the indices of the array.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "ARRAY_NOT_SORTED"
+    ]
+  },
+  {
+    "questionId": "bsa-q2",
+    "topicId": "binary-search-on-answer",
+    "targetStage": "DERIVE",
+    "difficulty": "MEDIUM",
+    "content": "For the problem of splitting an array of positive integers into K subarrays to minimize the maximum sum, what is the strict mathematical lower bound (left) and upper bound (right) of the answer space?",
+    "expectedEvidence": "The lower bound is the maximum single element in the array, because a subarray cannot have a sum less than its largest element. The upper bound is the sum of all elements, which occurs if we put everything into a single subarray.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "ARBITRARY_BOUNDS"
+    ]
+  },
+  {
+    "questionId": "bsa-q3",
+    "topicId": "binary-search-on-answer",
+    "targetStage": "IMPLEMENTATION",
+    "difficulty": "HARD",
+    "content": "Write the Java `canSplit(int[] tasks, int k, int maxLoad)` feasibility method that returns true if the tasks can be split into `k` or fewer contiguous subarrays such that no subarray exceeds `maxLoad`.",
+    "expectedEvidence": "Iterate through tasks. Accumulate a current sum. If adding the next task exceeds `maxLoad`, start a new subarray and increment the subarray count. If any single task > `maxLoad` or if the subarray count > `k`, return false. Otherwise return true at the end.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "BOUNDARY_UPDATE_ERROR"
+    ]
+  },
+  {
+    "questionId": "bsa-q4",
+    "topicId": "binary-search-on-answer",
+    "targetStage": "EXPLANATION",
+    "difficulty": "MEDIUM",
+    "content": "When your feasibility predicate `canSplit(mid)` returns true, the typical boundary update is `right = mid` instead of `right = mid - 1`. Why must we include `mid` in the remaining search space?",
+    "expectedEvidence": "Because we are trying to find the minimum feasible answer. If `mid` is feasible, it might be the absolute minimum feasible answer. If we update to `mid - 1`, we might discard the correct optimal answer.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "BOUNDARY_UPDATE_ERROR"
+    ]
+  },
+  {
+    "questionId": "bsa-q5",
+    "topicId": "binary-search-on-answer",
+    "targetStage": "COUNTEREXAMPLE",
+    "difficulty": "MEDIUM",
+    "content": "Imagine you write a feasibility predicate `can(x)` that returns `true` for x=10, `false` for x=11, and `true` for x=12. What critical property is missing, and what will happen if you run Binary Search on Answer?",
+    "expectedEvidence": "The predicate is not monotonic. Binary search requires the boolean results to be strictly partitioned (e.g., all Falses followed by all Trues). Without monotonicity, the algorithm will take wrong turns and return an incorrect or arbitrary answer.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "NON_MONOTONIC_PREDICATE"
+    ]
+  },
+  {
+    "questionId": "bsa-q6",
+    "topicId": "binary-search-on-answer",
+    "targetStage": "OPTIMIZE",
+    "difficulty": "MEDIUM",
+    "content": "What is the time complexity of the Binary Search on Answer approach for the 'Split Array' problem? Express your answer in terms of N (number of tasks) and S (the size of the search space, Sum - Max).",
+    "expectedEvidence": "O(N log S). The binary search loop runs O(log S) times. In each iteration, we call the feasibility predicate which iterates through the array of size N in O(N) time.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "bsa-q7",
+    "topicId": "binary-search-on-answer",
+    "targetStage": "TRANSFER",
+    "difficulty": "HARD",
+    "content": "How would you apply Binary Search on Answer to find the minimum eating speed `K` such that Koko can eat all `N` piles of bananas within `H` hours? What is your initial search space and feasibility predicate?",
+    "expectedEvidence": "The search space for speed `K` is from L = 1 to R = max(piles). The feasibility predicate `can(K)` iterates through the piles and calculates the total hours needed as the sum of ceil(pile / K). If total hours <= H, it returns true.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": true,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "ARBITRARY_BOUNDS"
+    ]
+  },
+  {
+    "questionId": "bsa-q8",
+    "topicId": "binary-search-on-answer",
+    "targetStage": "RETRIEVAL",
+    "difficulty": "MEDIUM",
+    "content": "What is the crucial mathematical property a feasibility predicate `can(x)` must have for Binary Search on Answer to work, and how does this differ from standard binary search?",
+    "expectedEvidence": "The predicate must be monotonic (a boolean step function: FFFFFTTTT). Standard binary search uses a sorted array to guarantee elements are monotonic, while Binary Search on Answer guarantees the answers to the predicate are monotonic.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": true,
+    "allowedMisconceptions": [
+      "NON_MONOTONIC_PREDICATE"
+    ]
+  },
+  {
+    "questionId": "bsa-remediation-1",
+    "topicId": "binary-search-on-answer",
+    "targetStage": "DEBUGGING",
+    "difficulty": "EASY",
+    "content": "You updated the boundary using `right = mid - 1` when the predicate returned true. Why might this incorrectly skip the optimal answer?",
+    "expectedEvidence": "Because `mid` itself could be the minimum feasible answer. Skipping it excludes the correct answer.",
+    "targetsMisconception": "BOUNDARY_UPDATE_ERROR",
+    "isRemediation": true,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "BOUNDARY_UPDATE_ERROR"
+    ]
+  }
+]

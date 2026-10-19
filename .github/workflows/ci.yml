@@ -1,0 +1,123 @@
+name: Continuous Integration (Java Backend & React Frontend)
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build & Test (Java 21 LTS)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: java_dsa_mastery_phase2b_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgrespassword
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21 LTS
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Make Maven wrapper executable
+        run: chmod +x ./mvnw
+
+      - name: Compile and test in-memory mode
+        run: ./mvnw -B clean test
+        env:
+          # GEMINI_API_KEY is intentionally omitted to verify clean deterministic offline behavior
+          SPRING_PROFILES_ACTIVE: default
+
+      - name: Run PostgreSQL transactional integration tests
+        run: >
+          ./mvnw -B test
+          -Dspring.profiles.active=postgres
+          -Dspring.datasource.url=jdbc:postgresql://localhost:5433/java_dsa_mastery_phase2b_test
+          -Dspring.datasource.username=postgres
+          -Dspring.datasource.password=postgrespassword
+          -Dtest=TransactionalPostgresSessionIntegrationTest
+        env:
+          SPRING_PROFILES_ACTIVE: postgres
+
+      - name: Package executable application JAR
+        run: ./mvnw -B package -DskipTests
+
+      - name: Publish test results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-test-reports
+          path: target/surefire-reports/
+          retention-days: 14
+
+      - name: Report test summary
+        if: always()
+        run: |
+          echo "=== Test Execution Summary ==="
+          if [ -d "target/surefire-reports" ]; then
+            TOTAL_RUN=$(grep -h "tests=" target/surefire-reports/TEST-*.xml 2>/dev/null | sed -n 's/.*tests="\([0-9]*\)".*/\1/p' | awk '{s+=$1} END {print s}')
+            TOTAL_FAILURES=$(grep -h "failures=" target/surefire-reports/TEST-*.xml 2>/dev/null | sed -n 's/.*failures="\([0-9]*\)".*/\1/p' | awk '{s+=$1} END {print s}')
+            TOTAL_ERRORS=$(grep -h "errors=" target/surefire-reports/TEST-*.xml 2>/dev/null | sed -n 's/.*errors="\([0-9]*\)".*/\1/p' | awk '{s+=$1} END {print s}')
+            TOTAL_SKIPPED=$(grep -h "skipped=" target/surefire-reports/TEST-*.xml 2>/dev/null | sed -n 's/.*skipped="\([0-9]*\)".*/\1/p' | awk '{s+=$1} END {print s}')
+            echo "Total tests executed: ${TOTAL_RUN:-0}"
+            echo "Failures: ${TOTAL_FAILURES:-0}"
+            echo "Errors: ${TOTAL_ERRORS:-0}"
+            echo "Skipped: ${TOTAL_SKIPPED:-0} (Opt-in live AI tests and Docker tests safely skipped without credentials)"
+          fi
+
+  frontend:
+    name: Frontend Test & Build (Node 20 LTS)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Verify package-lock.json exists
+        run: |
+          if [ ! -f "package-lock.json" ]; then
+            echo "Error: package-lock.json is missing in frontend/. Unpinned installs are prohibited."
+            exit 1
+          fi
+
+      - name: Install dependencies strictly from lockfile
+        run: npm ci
+
+      - name: Run frontend unit & integration tests
+        run: npm test
+
+      - name: Run TypeScript typecheck
+        run: npm run typecheck
+
+      - name: Build production bundle
+        run: npm run build

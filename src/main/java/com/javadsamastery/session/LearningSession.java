@@ -186,4 +186,22 @@ public class LearningSession {
     public LearnerProfile getLearnerProfile() {
         return learnerProfile;
     }
+
+    public static LearningSession rehydrate(
+            LearnerProfile learnerProfile,
+            MasteryEngine masteryEngine,
+            com.javadsamastery.engine.QuestionSelector questionSelector,
+            AITutorEngine tutor,
+            List<EvidenceRecord> history,
+            com.javadsamastery.domain.evidence.AttemptContext activeContext,
+            boolean active
+    ) {
+        LearningSession session = new LearningSession(learnerProfile, masteryEngine, questionSelector, tutor);
+        if (history != null) {
+            session.sessionHistory.addAll(history);
+        }
+        session.activeContext = activeContext;
+        session.active = active;
+        return session;
+    }
 }

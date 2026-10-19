@@ -18,5 +18,7 @@
   "comparisonWithAlternatives": "Brute force: O(N^2) or O(N^3) time. Sliding Window: O(N) time (optimal) by amortizing the work of the inner loop.",
   "practiceProblems": "1. Longest Substring Without Repeating Characters, 2. Minimum Size Subarray Sum, 3. Find All Anagrams in a String.",
   "transferProblem": "Given an array of positive integers and an integer 'target', find the minimal length of a contiguous subarray of which the sum is greater than or equal to 'target'. If there is no such subarray, return 0. Explain how variable-size sliding window applies.",
-  "retrievalPrompt": "Why is the time complexity of a variable-size sliding window O(N) even though there is a `while` loop inside a `for` loop?"
+  "retrievalPrompt": "Why is the time complexity of a variable-size sliding window O(N) even though there is a `while` loop inside a `for` loop?",
+  "implementationExplanation": "The `for` loop expands the window by moving `right`. The `HashSet` tracks character frequencies. The `while` loop contracts the window from `left` until the duplicate is removed, restoring the invariant before updating `maxLength`.",
+  "dryRun": "String \"pwwk\". R=0, L=0, win={p}. max=1. R=1, L=0, win={p,w}. max=2. R=2. \"w\" in win. While loop: remove \"p\", L=1. \"w\" still in win. remove \"w\", L=2. Add \"w\", win={w}. max=2. R=3, L=2, win={w,k}. max=2. Return 2."
 }

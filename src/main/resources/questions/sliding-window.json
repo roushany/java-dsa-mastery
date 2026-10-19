@@ -134,5 +134,18 @@
     "allowedMisconceptions": [
       "WINDOW_INVARIANT"
     ]
+  },
+  {
+    "questionId": "sw-retrieval-1",
+    "topicId": "sliding-window",
+    "targetStage": "RETRIEVAL",
+    "difficulty": "MEDIUM",
+    "content": "Why is the time complexity of a variable-size sliding window O(N) even though there is a `while` loop inside a `for` loop?",
+    "expectedEvidence": "Because both the left and right pointers only move forward. Each element is added to the window at most once and removed at most once.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": true,
+    "allowedMisconceptions": []
   }
 ]

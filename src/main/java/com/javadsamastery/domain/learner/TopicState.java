@@ -58,6 +58,11 @@ public class TopicState {
         retrievalPasses = 0;
         
         for (EvidenceRecord record : topicHistory) {
+            if (record.result() == EvaluationResult.INVALID_RESPONSE ||
+                record.result() == EvaluationResult.PROVIDER_FAILURE ||
+                record.result() == EvaluationResult.PROVIDER_TIMEOUT) {
+                continue; // Do not penalize or reward
+            }
             boolean isPass = record.result() == EvaluationResult.PASS;
             boolean isIndependent = record.hintCount() == 0;
             
@@ -103,10 +108,10 @@ public class TopicState {
                 
                 // Clear a misconception if we pass a task (simplified assumption: success implies overcoming recent hurdles)
                 if (record.misconceptionCategory() != null && !record.misconceptionCategory().isBlank()) {
-                    activeMisconceptions.remove(record.misconceptionCategory());
-                } else {
-                    activeMisconceptions.clear(); // Complete success clears all
-                }
+                      activeMisconceptions.remove(record.misconceptionCategory());
+                  } else if (isIndependent) {
+                      activeMisconceptions.clear(); // Independent success clears all
+                  }
                 
                 // Only independent solutions increase mastery counts
                 if (isIndependent) {
@@ -163,4 +168,8 @@ public class TopicState {
     public boolean isDerivationStrong() { return derivationStrong; }
     public boolean isImplementationStrong() { return implementationStrong; }
     public boolean isTransferStrong() { return transferStrong; }
+    public int getIndependentConceptPasses() { return independentConceptPasses; }
+    public int getIndependentImplementationPasses() { return independentImplementationPasses; }
+    public int getTransferPasses() { return transferPasses; }
+    public int getRetrievalPasses() { return retrievalPasses; }
 }

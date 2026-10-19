@@ -4,7 +4,7 @@
   "learningObjectives": "Understand how to sequentially search an array. Identify when linear search is necessary (unsorted data).",
   "prerequisites": "Basic understanding of arrays and loops.",
   "intuition": "Like looking for a specific book on a messy desk by checking each item one by one.",
-  "formalModel": "f(A, target) = i if A[i] == target else -1, ∀ i ∈ [0, n-1]",
+  "formalModel": "f(A, target) = i if A[i] == target else -1, \u00e2\u02c6\u20ac i \u00e2\u02c6\u02c6 [0, n-1]",
   "recognitionSignals": "Data is unsorted, or no auxiliary index exists.",
   "derivation": "Start at index 0. If current matches target, return index. Else increment index. If end reached, return -1.",
   "pseudocode": "for (int i=0; i<A.length; i++) { if (A[i] == target) return i; } return -1;",
@@ -18,5 +18,7 @@
   "comparisonWithAlternatives": "Binary search (requires sorted). Hash map (requires O(N) space).",
   "practiceProblems": "1. Find first index. 2. Find last index.",
   "transferProblem": "Find the first occurrence of a negative number in an array.",
-  "retrievalPrompt": "When should you prefer Linear Search over Binary Search?"
+  "retrievalPrompt": "When should you prefer Linear Search over Binary Search?",
+  "implementationExplanation": "The for-loop iterates through the array from index 0 to length-1. The if-statement checks for the target. Returning early (index i) guarantees the first match is found. If the loop completes without returning, it means the target was not found, so we return -1.",
+  "dryRun": "Array [4, 2, 7], target 7. i=0, A[0]=4 != 7. i=1, A[1]=2 != 7. i=2, A[2]=7 == 7. Return 2."
 }

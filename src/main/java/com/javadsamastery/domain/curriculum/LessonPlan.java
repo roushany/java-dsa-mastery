@@ -19,7 +19,8 @@ public class LessonPlan {
         LearningState.EXPLANATION,
         LearningState.COUNTEREXAMPLE,
         LearningState.OPTIMIZE,
-        LearningState.TRANSFER
+        LearningState.TRANSFER,
+        LearningState.RETRIEVAL
     );
 
     public LessonPlan(TopicDefinition definition) {

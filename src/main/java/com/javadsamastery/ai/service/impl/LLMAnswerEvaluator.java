@@ -6,8 +6,13 @@ import com.javadsamastery.ai.provider.LLMProvider;
 import com.javadsamastery.ai.service.AnswerEvaluator;
 import com.javadsamastery.ai.security.AIResponseValidator;
 import com.javadsamastery.domain.evidence.EvaluationResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LLMAnswerEvaluator implements AnswerEvaluator {
+
+    private static final Logger log = LoggerFactory.getLogger(LLMAnswerEvaluator.class);
+
     private final LLMProvider provider;
 
     public LLMAnswerEvaluator(LLMProvider provider) {
@@ -20,7 +25,7 @@ public class LLMAnswerEvaluator implements AnswerEvaluator {
             ? String.join(", ", allowedMisconceptions) 
             : "";
             
-                String systemPrompt = """
+        String systemPrompt = """
             You are a pedagogical evaluator for a deterministic learning state machine.
             Your role is STRICTLY ADVISORY. You do NOT control the learner's state, mastery, or curriculum.
             
@@ -50,21 +55,16 @@ public class LLMAnswerEvaluator implements AnswerEvaluator {
                             "\n--- LEARNER ANSWER ---\n" + answer;
         
         try {
-            System.out.println("[AI DEBUG] generateStructured invoked");
+            log.debug("Invoking structured AI evaluation");
             EvaluationResultDto dto = provider.generateStructured(systemPrompt, userPrompt, EvaluationResultDto.class);
-            
-            System.out.println("[AI DEBUG] DTO mapping success=true");
-            System.out.println("[AI DEBUG] DTO evaluation value=" + dto.evaluation());
-            System.out.println("[AI DEBUG] DTO misconceptionCategory=" + dto.misconceptionCategory());
 
             // Serialize back to JSON for the authoritative AIResponseValidator
             com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
             String json = mapper.writeValueAsString(dto);
-            System.out.println("[AI DEBUG] validator entry JSON=" + json);
-            
+
             EvaluationResult eval = AIResponseValidator.validateAndExtractEvaluation(json, allowedMisconceptions);
-            System.out.println("[AI DEBUG] final evaluation=" + eval);
-            
+            log.debug("Validated evaluation result: {}", eval);
+
             String misconception = AIResponseValidator.extractMisconception(json, allowedMisconceptions);
             
             return new EvaluationResultDto(
@@ -75,13 +75,10 @@ public class LLMAnswerEvaluator implements AnswerEvaluator {
                 dto.recommendedRemediation() != null ? dto.recommendedRemediation() : "none"
             );
         } catch (AIProviderException e) {
-            System.out.println("[AI DEBUG] AIProviderException: " + e.getMessage());
-            if (e.getCause() != null) {
-                System.out.println("[AI DEBUG] Caused by: " + e.getCause().getClass().getName() + ": " + e.getCause().getMessage());
-            }
-            throw e; // Propagate up to the engine to handle gracefully as infrastructure failure
+            log.warn("AIProviderException during answer evaluation: {}", e.getMessage());
+            throw e;
         } catch (Exception e) {
-            System.out.println("[AI DEBUG] Exception: " + e.getMessage());
+            log.error("Unexpected error during answer evaluation", e);
             throw new AIProviderException("UNKNOWN_EXCEPTION_FAILURE: " + e.getMessage(), e);
         }
     }

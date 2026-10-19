@@ -59,7 +59,8 @@ public class EvidencePolicy {
             context.difficulty(),
             context.questionType(),
             hintCount,
-            false,
+            context.expectedState() == LearningState.RETRIEVAL,
+
             finalResult,
             proposedMisconception,
             Instant.now()
@@ -74,7 +75,8 @@ public class EvidencePolicy {
             context.difficulty(),
             context.questionType(),
             hintCount,
-            false,
+            context.expectedState() == LearningState.RETRIEVAL,
+
             EvaluationResult.INVALID_RESPONSE, // safely reject without pedagogical penalty
             null, // No valid misconception for invalid response
             Instant.now()

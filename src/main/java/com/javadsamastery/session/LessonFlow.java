@@ -73,8 +73,8 @@ public class LessonFlow {
             return;
         }
 
-        // 2. Safely ignore AI hallucinations from advancing/failing the learner pedagogically
-        if (result == EvaluationResult.INVALID_RESPONSE || result == EvaluationResult.HINT || result == EvaluationResult.PARTIAL) {
+        // 2. Safely ignore AI hallucinations and provider errors from advancing/failing the learner pedagogically
+        if (result == EvaluationResult.INVALID_RESPONSE || result == EvaluationResult.HINT || result == EvaluationResult.PARTIAL || result == EvaluationResult.PROVIDER_FAILURE || result == EvaluationResult.PROVIDER_TIMEOUT) {
             return; // Stay in current state
         }
 
@@ -130,5 +130,40 @@ public class LessonFlow {
     
     public List<EvidenceRecord> getHistory() {
         return Collections.unmodifiableList(history);
+    }
+
+    public int getNominalStageIndex() {
+        return nominalStageIndex;
+    }
+
+    public int getPedagogicalFailures() {
+        return pedagogicalFailures;
+    }
+
+    public int getTotalAttemptsInState() {
+        return totalAttemptsInState;
+    }
+
+    public static LessonFlow rehydrate(
+            TopicDefinition topicDef,
+            TopicTemplate content,
+            LearnerProfile profile,
+            MasteryEngine masteryEngine,
+            LearningState activeState,
+            int nominalStageIndex,
+            int pedagogicalFailures,
+            int totalAttemptsInState,
+            List<EvidenceRecord> history
+    ) {
+        LessonFlow flow = new LessonFlow(topicDef, content, profile, masteryEngine);
+        flow.activeState = activeState;
+        flow.nominalStageIndex = nominalStageIndex;
+        flow.pedagogicalFailures = pedagogicalFailures;
+        flow.totalAttemptsInState = totalAttemptsInState;
+        flow.history.clear();
+        if (history != null) {
+            flow.history.addAll(history);
+        }
+        return flow;
     }
 }

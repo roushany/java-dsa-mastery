@@ -1,0 +1,95 @@
+server:
+  port: 8080
+  tomcat:
+    max-swallow-size: 100KB
+
+spring:
+  application:
+    name: java-dsa-mastery
+  servlet:
+    multipart:
+      max-request-size: 100KB
+
+javadsa:
+  persistence:
+    enabled: ${JAVADSA_PERSISTENCE_ENABLED:false}
+  security:
+    rate-limit:
+      enabled: ${JAVADSA_RATE_LIMIT_ENABLED:true}
+      general-rpm: ${JAVADSA_GENERAL_RPM:300}
+      learner-ai-rpm: ${JAVADSA_LEARNER_AI_RPM:15}
+      session-ai-rpm: ${JAVADSA_SESSION_AI_RPM:10}
+      global-ai-rpm: ${JAVADSA_GLOBAL_AI_RPM:60}
+      max-entries: ${JAVADSA_RATE_LIMIT_MAX_ENTRIES:10000}
+      idle-timeout-seconds: ${JAVADSA_RATE_LIMIT_IDLE_TIMEOUT:600}
+    token:
+      secret: ${JAVADSA_SECURITY_TOKEN_SECRET:javadsa-mastery-default-secret-key-32chars-min!}
+      validity-days: 30
+    cors:
+      allowed-origins: ${JAVADSA_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:5173}
+    auth:
+      strict-ownership: ${JAVADSA_STRICT_OWNERSHIP:true}
+    proxy:
+      trusted-proxies: ${JAVADSA_TRUSTED_PROXIES:}
+  cache:
+    session:
+      max-entries: ${JAVADSA_SESSION_CACHE_MAX_ENTRIES:1000}
+      idle-timeout-minutes: ${JAVADSA_SESSION_CACHE_IDLE_TIMEOUT_MINUTES:30}
+  session:
+    ttl-hours: ${JAVADSA_SESSION_TTL_HOURS:24}
+  cleanup:
+    enabled: ${JAVADSA_CLEANUP_ENABLED:true}
+    reaper-cron: ${JAVADSA_CLEANUP_REAPER_CRON:0 0 * * * *}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: default
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+      - org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration
+
+---
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://127.0.0.1:5433/java_dsa_mastery_phase2b_test}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      pool-name: JavaDsaMasteryHikariPool
+      maximum-pool-size: ${SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE:5}
+      minimum-idle: ${SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE:2}
+      connection-timeout: ${SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT:10000}
+      idle-timeout: ${SPRING_DATASOURCE_HIKARI_IDLE_TIMEOUT:300000}
+      max-lifetime: ${SPRING_DATASOURCE_HIKARI_MAX_LIFETIME:1200000}
+      keepalive-time: ${SPRING_DATASOURCE_HIKARI_KEEPALIVE_TIME:60000}
+      leak-detection-threshold: ${SPRING_DATASOURCE_HIKARI_LEAK_DETECTION_THRESHOLD:15000}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+javadsa:
+  persistence:
+    enabled: true

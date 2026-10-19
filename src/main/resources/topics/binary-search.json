@@ -18,5 +18,7 @@
   "comparisonWithAlternatives": "Linear Search: O(N) time but works on unsorted. Binary Search: O(log N) time but REQUIRES sorting. When you need multiple searches, sorting once (O(N log N)) and binary searching multiple times is optimal.",
   "practiceProblems": "1. Classic Binary Search, 2. First Bad Version, 3. Search Insert Position.",
   "transferProblem": "Suppose you have an array that increases and then decreases (a mountain array). Can you still use the 'eliminate half' concept to find the peak? Why?",
-  "retrievalPrompt": "What is the exact condition required to eliminate half the search space in an array, and how do you safely calculate the midpoint in Java?"
+  "retrievalPrompt": "What is the exact condition required to eliminate half the search space in an array, and how do you safely calculate the midpoint in Java?",
+  "implementationExplanation": "left and right boundaries define the active search space. `mid = left + (right - left) / 2` avoids integer overflow. The conditions `left = mid + 1` and `right = mid - 1` strictly reduce the search space, preventing infinite loops.",
+  "dryRun": "Array [1, 3, 5, 7, 9], target 7. L=0, R=4. mid=2 (5). 5 < 7, so L=3, R=4. mid=3 (7). 7 == 7. Return 3."
 }

@@ -1,0 +1,145 @@
+[
+  {
+    "questionId": "ps-q1",
+    "topicId": "prefix-sum",
+    "targetStage": "CONCEPT_ASSESSMENT",
+    "difficulty": "EASY",
+    "content": "Why is Prefix Sum much faster than calculating the sum using a loop every time a range query is requested?",
+    "expectedEvidence": "Because it precomputes the cumulative sums in a single pass, allowing any range sum to be calculated with a single subtraction in O(1) time.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "ps-q2",
+    "topicId": "prefix-sum",
+    "targetStage": "DERIVE",
+    "difficulty": "MEDIUM",
+    "content": "If you already know the sum of all elements up to index i, how do you find the sum of all elements up to index i+1?",
+    "expectedEvidence": "Just add the element at arr[i] to the previously computed sum up to index i.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "ps-q3",
+    "topicId": "prefix-sum",
+    "targetStage": "IMPLEMENTATION",
+    "difficulty": "MEDIUM",
+    "content": "Write the Java code to build an N+1 sized prefix sum array from an input array `arr`.",
+    "expectedEvidence": "Initialize prefix array of size arr.length + 1. Set prefix[0] = 0. Loop i from 0 to length-1, setting prefix[i+1] = prefix[i] + arr[i].",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "OFF_BY_ONE",
+      "MUTATION_ERROR"
+    ]
+  },
+  {
+    "questionId": "ps-q4",
+    "topicId": "prefix-sum",
+    "targetStage": "EXPLANATION",
+    "difficulty": "MEDIUM",
+    "content": "Why do we initialize a prefix array of size N+1 with prefix[0] = 0 instead of a size N array?",
+    "expectedEvidence": "It represents the sum of zero elements (an empty prefix). This avoids the need for special if-statements when querying a range that starts at index 0.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "OFF_BY_ONE"
+    ]
+  },
+  {
+    "questionId": "ps-q5",
+    "topicId": "prefix-sum",
+    "targetStage": "COUNTEREXAMPLE",
+    "difficulty": "EASY",
+    "content": "If we used a size N array where prefix[i] = sum(0..i), what happens when we try to compute the sum from index 0 to R using the formula prefix[R] - prefix[L-1]?",
+    "expectedEvidence": "When L is 0, L-1 becomes -1, which causes an ArrayIndexOutOfBoundsException.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "ps-q6",
+    "topicId": "prefix-sum",
+    "targetStage": "OPTIMIZE",
+    "difficulty": "HARD",
+    "content": "If we are allowed to modify the input array and don't need the original values anymore, how can we optimize the space complexity of building the prefix sum?",
+    "expectedEvidence": "We can build the prefix sum directly inside the input array, reducing auxiliary space to O(1). However, we lose the N+1 empty prefix buffer.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "ps-q7",
+    "topicId": "prefix-sum",
+    "targetStage": "TRANSFER",
+    "difficulty": "HARD",
+    "content": "How would you find the sum of elements in a sub-grid of a 2D matrix in O(1) time after preprocessing?",
+    "expectedEvidence": "Build a 2D prefix sum array where prefix[r][c] stores the sum from (0,0) to (r-1, c-1). Then use inclusion-exclusion: prefix[R][C] - prefix[r][C] - prefix[R][c] + prefix[r][c].",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": true,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "OFF_BY_ONE"
+    ]
+  },
+  {
+    "questionId": "ps-q8",
+    "topicId": "prefix-sum",
+    "targetStage": "RETRIEVAL",
+    "difficulty": "MEDIUM",
+    "content": "What is the formula to compute the sum of the half-open range [left, right) using a standard N+1 sized prefix sum array?",
+    "expectedEvidence": "prefix[right] - prefix[left]",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": true,
+    "allowedMisconceptions": [
+      "OFF_BY_ONE"
+    ]
+  },
+  {
+    "questionId": "prefix-remediation-1",
+    "topicId": "prefix-sum",
+    "targetStage": "DEBUGGING",
+    "difficulty": "EASY",
+    "content": "You queried the range `[L, R]` using `prefix[R] - prefix[L-1]`, but what happens if `L == 0`?",
+    "expectedEvidence": "It causes an IndexOutOfBoundsException. The prefix array is typically 1-indexed (size N+1) to safely handle L=0 without bounds checking.",
+    "targetsMisconception": "OFF_BY_ONE",
+    "isRemediation": true,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "OFF_BY_ONE"
+    ]
+  },
+  {
+    "questionId": "prefix-remediation-2",
+    "topicId": "prefix-sum",
+    "targetStage": "DEBUGGING",
+    "difficulty": "EASY",
+    "content": "You modified the original array values during the range queries. Why does this invalidate the prefix sum approach?",
+    "expectedEvidence": "The prefix sum array represents cumulative data from the original array. If the original values change, the precomputed prefix sums become stale and inaccurate.",
+    "targetsMisconception": "MUTATION_ERROR",
+    "isRemediation": true,
+    "isTransfer": false,
+    "isRetrieval": false,
+    "allowedMisconceptions": [
+      "MUTATION_ERROR"
+    ]
+  }
+]

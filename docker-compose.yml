@@ -1,0 +1,42 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: java-dsa-mastery:latest
+    container_name: java-dsa-mastery-app
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/java_dsa_mastery_phase2b_test
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-postgrespassword}
+      - JAVADSA_PERSISTENCE_ENABLED=true
+      - JAVADSA_SECURITY_TOKEN_SECRET=${JAVADSA_SECURITY_TOKEN_SECRET:-javadsa-mastery-default-secret-key-32chars-min!}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: java-dsa-mastery-postgres
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=java_dsa_mastery_phase2b_test
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgrespassword}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d java_dsa_mastery_phase2b_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  pgdata:

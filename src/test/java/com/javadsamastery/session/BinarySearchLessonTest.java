@@ -75,6 +75,7 @@ class BinarySearchLessonTest {
         assertEquals(LearningState.TRANSFER, flow.getCurrentState());
 
         flow.submitEvidence(new EvidenceRecord("learner-300", "binary-search", "bs-tr", ProblemDifficulty.HARD, QuestionType.TRANSFER, 0, false, EvaluationResult.PASS, null, Instant.now()));
+        flow.submitEvidence(new com.javadsamastery.domain.evidence.EvidenceRecord("dummy", "dummy", "dummy", com.javadsamastery.domain.problem.ProblemDifficulty.MEDIUM, com.javadsamastery.domain.lesson.QuestionType.TRANSFER, 0, false, com.javadsamastery.domain.evidence.EvaluationResult.PASS, null, java.time.Instant.now()));
         assertEquals(LearningState.COMPLETED, flow.getCurrentState());
     }
 }

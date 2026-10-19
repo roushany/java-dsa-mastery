@@ -71,6 +71,7 @@ class LessonFlowTest {
         assertEquals(LearningState.TRANSFER, flow.getCurrentState());
 
         flow.submitEvidence(passRecord()); // Transfer passed
+        flow.submitEvidence(passRecord()); // Retrieval passed
         assertEquals(LearningState.COMPLETED, flow.getCurrentState());
     }
 
@@ -221,6 +222,7 @@ class LessonFlowTest {
     @Test
     void testSessionCompletion() {
         traverseTo(LearningState.TRANSFER);
+        flow.submitEvidence(passRecord());
         flow.submitEvidence(passRecord());
         assertEquals(LearningState.COMPLETED, flow.getCurrentState());
         

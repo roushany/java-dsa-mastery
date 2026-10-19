@@ -106,5 +106,18 @@
     "isTransfer": true,
     "isRetrieval": false,
     "allowedMisconceptions": []
+  },
+  {
+    "questionId": "tp-retrieval-1",
+    "topicId": "two-pointers",
+    "targetStage": "RETRIEVAL",
+    "difficulty": "MEDIUM",
+    "content": "Why does the Two Pointers technique safely eliminate elements without missing a valid pair in a sorted array?",
+    "expectedEvidence": "By evaluating the sum at the extremes (left and right), moving the left pointer eliminates it because it's too small even with the largest right. Moving the right pointer eliminates it because it's too large even with the smallest left.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": true,
+    "allowedMisconceptions": []
   }
 ]

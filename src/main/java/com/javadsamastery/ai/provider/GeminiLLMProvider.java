@@ -2,6 +2,8 @@ package com.javadsamastery.ai.provider;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -10,19 +12,21 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 
 public class GeminiLLMProvider implements LLMProvider {
-    
+
+    private static final Logger log = LoggerFactory.getLogger(GeminiLLMProvider.class);
+
     protected String apiKey;
     private final String model;
     private final HttpClient client;
     private final ObjectMapper mapper;
     private final String baseUrl;
-    
+
     public GeminiLLMProvider() {
         this.apiKey = System.getenv("GEMINI_API_KEY");
         this.baseUrl = System.getProperty("gemini.api.baseurl", "https://generativelanguage.googleapis.com/v1beta/models/");
         String envModel = System.getenv("GEMINI_MODEL");
         this.model = (envModel != null && !envModel.isBlank()) ? envModel : "gemini-3.8-flash";
-        
+
         this.client = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(10))
                 .build();
@@ -36,8 +40,6 @@ public class GeminiLLMProvider implements LLMProvider {
 
     @Override
     public <T> T generateStructured(String systemPrompt, String userPrompt, Class<T> responseType) throws AIProviderException {
-        // We only support EvaluationResultDto schema enforcing at the provider level for now.
-        // Other types will just use application/json.
         boolean useEvalSchema = responseType.getSimpleName().equals("EvaluationResultDto");
         String rawJson = generateRawWithSchema(systemPrompt, userPrompt, useEvalSchema);
         try {
@@ -87,10 +89,8 @@ public class GeminiLLMProvider implements LLMProvider {
 
             String url = baseUrl + model + ":generateContent";
 
-            System.out.println("[AI DEBUG] provider class=" + this.getClass().getName());
-            System.out.println("[AI DEBUG] method invoked=generateRawWithSchema");
-            System.out.println("[AI DEBUG] model=" + model);
-            
+            log.debug("Calling Gemini API: endpoint={}, model={}", url, model);
+
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .header("Content-Type", "application/json")
@@ -101,30 +101,25 @@ public class GeminiLLMProvider implements LLMProvider {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             int status = response.statusCode();
-            System.out.println("[AI DEBUG] HTTP status=" + status);
-            
+
             if (status != 200) {
-                System.out.println("[AI DEBUG] Gemini API returned HTTP " + status);
-                System.out.println("[AI DEBUG] Endpoint: " + url);
-                System.out.println("[AI DEBUG] Model: " + model);
+                log.warn("Gemini API returned HTTP {} from endpoint {} for model {}", status, url, model);
                 try {
                     JsonNode errRoot = mapper.readTree(response.body());
                     if (errRoot.has("error")) {
                         JsonNode err = errRoot.get("error");
-                        if (err.has("status")) System.out.println("[AI DEBUG] Error Status: " + err.get("status").asText());
-                        if (err.has("message")) System.out.println("[AI DEBUG] Error Message: " + err.get("message").asText());
-                    } else {
-                        System.out.println("[AI DEBUG] Error Body: " + response.body());
+                        if (err.has("status")) log.warn("Gemini Error Status: {}", err.get("status").asText());
+                        if (err.has("message")) log.warn("Gemini Error Message: {}", err.get("message").asText());
                     }
                 } catch (Exception parseEx) {
-                    System.out.println("[AI DEBUG] Non-JSON Error Body: " + response.body());
+                    log.warn("Gemini non-JSON error response received");
                 }
             }
 
             if (status == 401 || status == 403) {
                 throw new AIProviderException("PROVIDER_FAILURE: Gemini API authentication failed (HTTP " + status + ").");
             } else if (status == 429) {
-                throw new AIProviderException("PROVIDER_FAILURE: Gemini API rate limit exceeded (HTTP 429).");
+                throw new AIProviderException("PROVIDER_RATE_LIMIT: Gemini API rate limit exceeded (HTTP 429). Please retry shortly.");
             } else if (status >= 500) {
                 throw new AIProviderException("PROVIDER_FAILURE: Gemini API server error (HTTP " + status + ").");
             } else if (status >= 400) {
@@ -132,12 +127,6 @@ public class GeminiLLMProvider implements LLMProvider {
             }
 
             JsonNode root = mapper.readTree(response.body());
-            
-            int candidateCount = 0;
-            if (root.has("candidates") && root.get("candidates").isArray()) {
-                candidateCount = root.get("candidates").size();
-            }
-            System.out.println("[AI DEBUG] candidate count=" + candidateCount);
 
             if (!root.has("candidates") || !root.get("candidates").isArray() || root.get("candidates").size() == 0) {
                 if (root.has("promptFeedback") && root.get("promptFeedback").has("blockReason")) {
@@ -147,18 +136,15 @@ public class GeminiLLMProvider implements LLMProvider {
             }
 
             JsonNode firstCandidate = root.get("candidates").get(0);
-            
+
             if (firstCandidate.has("finishReason")) {
                 String finishReason = firstCandidate.get("finishReason").asText();
-                System.out.println("[AI DEBUG] finishReason=" + finishReason);
                 if ("SAFETY".equalsIgnoreCase(finishReason)) {
                     throw new AIProviderException("PROVIDER_FAILURE: Gemini API response blocked due to SAFETY finishReason.");
                 } else if (!"STOP".equalsIgnoreCase(finishReason)) {
                     throw new AIProviderException("PROVIDER_FAILURE: Gemini API response stopped unexpectedly. finishReason: " + finishReason);
                 }
             }
-
-            System.out.println("[AI DEBUG] response content present=" + (firstCandidate.has("content") && firstCandidate.get("content").has("parts")));
 
             if (firstCandidate.has("content") && firstCandidate.get("content").has("parts")) {
                 JsonNode parts = firstCandidate.get("content").get("parts");
@@ -167,7 +153,6 @@ public class GeminiLLMProvider implements LLMProvider {
                      if (text == null || text.isBlank()) {
                          throw new AIProviderException("PROVIDER_FAILURE: Gemini API returned empty text part.");
                      }
-                     System.out.println("[AI DEBUG] response text length=" + text.length());
                      return text.trim();
                 }
             }
@@ -187,9 +172,9 @@ public class GeminiLLMProvider implements LLMProvider {
     private JsonNode buildEvaluationSchema() {
         var schema = mapper.createObjectNode();
         schema.put("type", "OBJECT");
-        
+
         var properties = mapper.createObjectNode();
-        
+
         var evalProp = mapper.createObjectNode();
         evalProp.put("type", "STRING");
         var enumArray = mapper.createArrayNode();

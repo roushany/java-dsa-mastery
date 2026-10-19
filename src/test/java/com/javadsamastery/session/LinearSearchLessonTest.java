@@ -58,10 +58,11 @@ class LinearSearchLessonTest {
         flow.submitEvidence(new EvidenceRecord("learner-200", "linear-search", "ls-tr", ProblemDifficulty.EASY, QuestionType.TRANSFER, 0, false, EvaluationResult.PASS, null, Instant.now()));
         
         // Final State
+        flow.submitEvidence(new com.javadsamastery.domain.evidence.EvidenceRecord("dummy", "dummy", "dummy", com.javadsamastery.domain.problem.ProblemDifficulty.MEDIUM, com.javadsamastery.domain.lesson.QuestionType.TRANSFER, 0, false, com.javadsamastery.domain.evidence.EvaluationResult.PASS, null, java.time.Instant.now()));
         assertEquals(LearningState.COMPLETED, flow.getCurrentState());
         
         // Mastery should be established as PROFICIENT
         assertEquals(TopicMastery.PROFICIENT, profile.getMastery("linear-search"));
-        assertEquals(6, flow.getHistory().size()); // Intro doesn't log an EvidenceRecord, 6 items
+        assertEquals(7, flow.getHistory().size()); // Intro doesn't log an EvidenceRecord, 6 items
     }
 }

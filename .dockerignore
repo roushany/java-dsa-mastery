@@ -1,0 +1,30 @@
+# Git
+.git
+.github
+
+# Maven build outputs
+target/
+*.class
+
+# IDE and Editor files
+.idea/
+*.iml
+*.iws
+.project
+.settings/
+.classpath
+.vscode/
+
+# Local Maven binaries and caches
+apache-maven-3.9.5/
+.m2/
+
+# Environment files and logs
+.env
+*.env
+*.log
+pg_test*
+
+# Documentation and Reports
+*.md
+docs/

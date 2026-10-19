@@ -84,8 +84,8 @@
     "topicId": "linear-search",
     "targetStage": "TRANSFER",
     "difficulty": "HARD",
-    "content": "Find the first occurrence of a negative number in an array.",
-    "expectedEvidence": "Use linear search, break when arr[i] < 0.",
+    "content": "Given an array of temperatures, find if there is any day where the temperature strictly dropped compared to the previous day. How would you solve this in one pass?",
+    "expectedEvidence": "Use a linear scan, comparing arr[i] with arr[i-1] starting from index 1. Return true as soon as arr[i] < arr[i-1].",
     "targetsMisconception": null,
     "isRemediation": false,
     "isTransfer": true,
@@ -97,12 +97,25 @@
     "topicId": "linear-search",
     "targetStage": "TRANSFER",
     "difficulty": "MEDIUM",
-    "content": "Find first negative number (Easier transfer fallback).",
-    "expectedEvidence": "Linear search < 0",
+    "content": "How would you use a linear scan to find the maximum element in an unsorted array, and why does this require checking every single element instead of exiting early?",
+    "expectedEvidence": "Maintain a max_seen variable. It requires checking every element because the maximum could be at the very last position, unlike searching for a specific target where you can stop once found.",
     "targetsMisconception": null,
     "isRemediation": false,
     "isTransfer": true,
     "isRetrieval": false,
+    "allowedMisconceptions": []
+  },
+  {
+    "questionId": "ls-retrieval-1",
+    "topicId": "linear-search",
+    "targetStage": "RETRIEVAL",
+    "difficulty": "EASY",
+    "content": "Why is it impossible to eliminate half of an unsorted array like we do in Binary Search?",
+    "expectedEvidence": "Because without sorting, any element could be anywhere, so no range can be safely excluded.",
+    "targetsMisconception": null,
+    "isRemediation": false,
+    "isTransfer": false,
+    "isRetrieval": true,
     "allowedMisconceptions": []
   }
 ]

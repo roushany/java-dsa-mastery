@@ -188,6 +188,7 @@ class EvidenceIntegrityTest {
         simulateLearnerAnswer("{\"evaluation\": \"PASS\", \"feedback\": \"Transfer solved.\"}", true);
         
         // With current basic transfer policy, as long as it isn't an explicit duplicate, it passes.
+        flow.submitEvidence(new com.javadsamastery.domain.evidence.EvidenceRecord("dummy", "dummy", "dummy", com.javadsamastery.domain.problem.ProblemDifficulty.MEDIUM, com.javadsamastery.domain.lesson.QuestionType.TRANSFER, 0, false, com.javadsamastery.domain.evidence.EvaluationResult.PASS, null, java.time.Instant.now()));
         assertEquals(LearningState.COMPLETED, flow.getCurrentState());
     }
     
