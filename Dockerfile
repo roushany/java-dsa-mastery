@@ -49,6 +49,6 @@ ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75.0 -XX:+UseSerialGC -XX:MaxMetaspa
 
 # Built-in health check using Actuator liveness probe
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
-  CMD curl -f http://localhost:8080/actuator/health/liveness || exit 1
+  CMD curl -f http://localhost:${PORT:-8080}/actuator/health/liveness || exit 1
 
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
