@@ -86,6 +86,9 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: javadsa
   flyway:
     enabled: true
     locations: classpath:db/migration
