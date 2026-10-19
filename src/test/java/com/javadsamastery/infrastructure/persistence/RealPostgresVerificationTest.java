@@ -26,13 +26,21 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RealPostgresVerificationTest {
 
-    private static final String JDBC_URL = "jdbc:postgresql://127.0.0.1:5433/java_dsa_mastery_phase2b_test";
-    private static final String USERNAME = "postgres";
-    private static final String PASSWORD = "";
+    private static final String JDBC_URL = System.getProperty("spring.datasource.url",
+            System.getenv().getOrDefault("SPRING_DATASOURCE_URL", "jdbc:postgresql://127.0.0.1:5433/java_dsa_mastery_phase2b_test"));
+    private static final String USERNAME = System.getProperty("spring.datasource.username",
+            System.getenv().getOrDefault("SPRING_DATASOURCE_USERNAME", "postgres"));
+    private static final String PASSWORD = System.getProperty("spring.datasource.password",
+            System.getenv().getOrDefault("SPRING_DATASOURCE_PASSWORD", ""));
 
     private static boolean isLocalPostgresAvailable() {
-        try (Socket socket = new Socket("127.0.0.1", 5433)) {
-            return true;
+        try {
+            java.net.URI uri = java.net.URI.create(JDBC_URL.substring(5));
+            String host = uri.getHost() != null ? uri.getHost() : "127.0.0.1";
+            int port = uri.getPort() > 0 ? uri.getPort() : 5433;
+            try (Socket socket = new Socket(host, port)) {
+                return true;
+            }
         } catch (Exception e) {
             return false;
         }
